@@ -1,8 +1,4 @@
-
-
-
-// FIX: Use relative paths for type imports.
-import type { GroundingChunk, TradeSignal, AlphaPlaybook } from '../types';
+import type { GroundingChunk, TradeSignal, AlphaPlaybook } from '@/types';
 
 interface StreamChunk {
     text: string;

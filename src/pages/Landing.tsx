@@ -1,21 +1,17 @@
-
-
-
 import React from 'react';
 import { Link } from 'react-router-dom';
-// FIX: Use relative paths for component imports.
-import { LogoIcon } from '../components/icons/LogoIcon';
-import { BoltIcon } from '../components/icons/BoltIcon';
-import { BrainIcon } from '../components/icons/BrainIcon';
-import { RiskIcon } from '../components/icons/RiskIcon';
-import { ConnectIcon } from '../components/icons/ConnectIcon';
-import { MonitorIcon } from '../components/icons/MonitorIcon';
-import { ActivateIcon } from '../components/icons/ActivateIcon';
-import { ExecutionIcon } from '../components/icons/ExecutionIcon';
-import { PredictiveIcon } from '../components/icons/PredictiveIcon';
-import { CameraIcon } from '../components/icons/CameraIcon';
-import { LayersIcon } from '../components/icons/LayersIcon';
-import { TargetIcon } from '../components/icons/TargetIcon';
+import { LogoIcon } from '@/components/icons/LogoIcon';
+import { BoltIcon } from '@/components/icons/BoltIcon';
+import { BrainIcon } from '@/components/icons/BrainIcon';
+import { RiskIcon } from '@/components/icons/RiskIcon';
+import { ConnectIcon } from '@/components/icons/ConnectIcon';
+import { MonitorIcon } from '@/components/icons/MonitorIcon';
+import { ActivateIcon } from '@/components/icons/ActivateIcon';
+import { ExecutionIcon } from '@/components/icons/ExecutionIcon';
+import { PredictiveIcon } from '@/components/icons/PredictiveIcon';
+import { CameraIcon } from '@/components/icons/CameraIcon';
+import { LayersIcon } from '@/components/icons/LayersIcon';
+import { TargetIcon } from '@/components/icons/TargetIcon';
 
 const FeatureCard: React.FC<{ icon: React.ReactNode; title: string; children: React.ReactNode }> = ({ icon, title, children }) => (
   <div className="bg-white/5 p-6 rounded-lg border border-white/10 transition-all duration-300 hover:border-[var(--color-accent)]/50 hover:-translate-y-1 hover:shadow-[0_0_25px_rgba(88,166,255,0.1)]">

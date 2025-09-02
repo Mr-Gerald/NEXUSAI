@@ -17,22 +17,18 @@ export async function initializeDatabase() {
 
     // --- VERCEL-SPECIFIC DATABASE HANDLING ---
     // This is the definitive fix for the 500 error on Vercel.
-    // Serverless environments have a read-only filesystem, except for the /tmp directory.
-    // On the first run, we copy our bundled database to the writable /tmp directory
-    // and all subsequent connections will use that writable copy.
     if (process.env.VERCEL) {
         const bundledDbPath = path.resolve(__dirname, 'database.sqlite');
         const writableDbPath = path.resolve('/tmp', 'database.sqlite');
 
-        try {
-            // Check if the writable DB already exists in /tmp
-            await fs.access(writableDbPath);
-        } catch (error) {
-            // If it doesn't exist, copy it from the read-only bundle
-            console.log('Database not found in /tmp, copying from bundle...');
-            await fs.copyFile(bundledDbPath, writableDbPath);
-            console.log('Database copied to /tmp successfully.');
-        }
+        // DEFINITIVE FIX: Always copy the file on initialization.
+        // This ensures that every serverless function invocation starts with a pristine,
+        // non-corrupted database from the deployment bundle, completely eliminating
+        // state-related issues from warm starts. fs.copyFile overwrites the destination
+        // if it already exists.
+        console.log('Vercel environment detected. Copying database to writable /tmp directory...');
+        await fs.copyFile(bundledDbPath, writableDbPath);
+        console.log('Database copied to /tmp successfully.');
         
         dbPath = writableDbPath; // Use the writable path for the connection
     } else {

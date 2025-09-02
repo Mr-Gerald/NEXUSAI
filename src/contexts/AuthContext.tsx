@@ -38,9 +38,20 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       body: JSON.stringify({ username, password }),
     });
     
+    if (!response.ok) {
+        try {
+            const errorData = await response.json();
+            throw new Error(errorData.message || `Server responded with status ${response.status}`);
+        } catch (jsonError) {
+            // This catches errors from response.json() if the body isn't valid JSON,
+            // which is the case for a 500 server crash HTML page.
+            throw new Error('A server error occurred. Please check server logs and try again.');
+        }
+    }
+    
     const data = await response.json();
 
-    if (!response.ok || !data.success) {
+    if (!data.success) {
       throw new Error(data.message || 'Login failed.');
     }
     

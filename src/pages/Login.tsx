@@ -1,12 +1,8 @@
-
-
-
 import React, { useState } from 'react';
-// FIX: Use relative paths for context and component imports.
-import { useAuth } from '../contexts/AuthContext';
+import { useAuth } from '@/contexts/AuthContext';
 import { useNavigate, Link } from 'react-router-dom';
-import { LockIcon } from '../components/icons/LockIcon';
-import { LogoIcon } from '../components/icons/LogoIcon';
+import { LockIcon } from '@/components/icons/LockIcon';
+import { LogoIcon } from '@/components/icons/LogoIcon';
 
 const Login: React.FC = () => {
     const { login } = useAuth();
