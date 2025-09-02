@@ -1,7 +1,6 @@
 import React, { createContext, useState, useContext, useMemo, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-// FIX: Use relative paths for type imports.
-import type { User } from '../types';
+import type { User } from '@/types';
 
 interface AuthContextType {
   user: User | null;
