@@ -10,32 +10,18 @@
         }
       },
       {
-        "src": "backend/server.js",
-        "use": "@vercel/node",
-        "config": {
-          "includeFiles": [
-            "backend/api/**",
-            "backend/ai/**",
-            "backend/data/**",
-            "backend/risk/**",
-            "backend/ws/**",
-            "backend/db.js",
-            "backend/state.js",
-            "backend/database.sqlite",
-            "backend/*.csv",
-            "backend/.env"
-          ]
-        }
+        "src": "api.js",
+        "use": "@vercel/node"
       }
     ],
     "rewrites": [
       {
         "source": "/api/(.*)",
-        "destination": "/backend/server.js"
+        "destination": "/api.js"
       },
       {
         "source": "/(.*)",
         "destination": "/index.html"
       }
     ]
-  }
+  }  
