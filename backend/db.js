@@ -1,7 +1,8 @@
-import sqlite3 from 'sqlite3';
+import sqlite3 from '@vscode/sqlite3';
 import { open } from 'sqlite';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import fs from 'fs/promises'; // Import fs/promises for file operations
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -12,13 +13,39 @@ export async function initializeDatabase() {
   if (db) return db;
 
   try {
-    const dbPath = path.resolve(__dirname, 'database.sqlite');
+    let dbPath;
+
+    // --- VERCEL-SPECIFIC DATABASE HANDLING ---
+    // This is the definitive fix for the 500 error on Vercel.
+    // Serverless environments have a read-only filesystem, except for the /tmp directory.
+    // On the first run, we copy our bundled database to the writable /tmp directory
+    // and all subsequent connections will use that writable copy.
+    if (process.env.VERCEL) {
+        const bundledDbPath = path.resolve(__dirname, 'database.sqlite');
+        const writableDbPath = path.resolve('/tmp', 'database.sqlite');
+
+        try {
+            // Check if the writable DB already exists in /tmp
+            await fs.access(writableDbPath);
+        } catch (error) {
+            // If it doesn't exist, copy it from the read-only bundle
+            console.log('Database not found in /tmp, copying from bundle...');
+            await fs.copyFile(bundledDbPath, writableDbPath);
+            console.log('Database copied to /tmp successfully.');
+        }
+        
+        dbPath = writableDbPath; // Use the writable path for the connection
+    } else {
+        // Use the local path for normal development
+        dbPath = path.resolve(__dirname, 'database.sqlite');
+    }
+      
     db = await open({
       filename: dbPath,
       driver: sqlite3.Database
     });
 
-    console.log('Connected to the SQLite database.');
+    console.log(`Connected to the SQLite database at ${dbPath}.`);
 
     await db.exec(`
       CREATE TABLE IF NOT EXISTS users (
