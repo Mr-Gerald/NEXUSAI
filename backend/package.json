@@ -1,3 +1,4 @@
+
 {
   "name": "nexus-ai-backend",
   "version": "1.0.0",
@@ -6,16 +7,5 @@
   "type": "module",
   "scripts": {
     "start": "node server.js"
-  },
-  "dependencies": {
-    "@google/genai": "^1.13.0",
-    "cors": "^2.8.5",
-    "csv-parse": "^6.1.0",
-    "dotenv": "^16.4.5",
-    "express": "^4.19.2",
-    "node-fetch": "^3.3.2",
-    "sqlite": "^5.1.1",
-    "sqlite3": "^5.1.7",
-    "ws": "^8.16.0"
   }
 }
