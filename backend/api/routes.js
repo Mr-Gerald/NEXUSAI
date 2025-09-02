@@ -5,7 +5,7 @@ import { activePlaybooks, executionCores, connectorToClientMap, lastHeartbeatMap
 
 export function initializeRoutes(app) {
     // --- New Authentication Routes ---
-    app.post('/api/auth/login', async (req, res) => {
+    app.post('/auth/login', async (req, res) => {
         const { username, password } = req.body;
         try {
             const db = getDb();
@@ -23,7 +23,7 @@ export function initializeRoutes(app) {
     });
 
     // --- New User Profile Routes ---
-    app.post('/api/user/profile', async (req, res) => {
+    app.post('/user/profile', async (req, res) => {
         const { id, username, fullName, email, profilePicture } = req.body;
         try {
             const db = getDb();
@@ -53,11 +53,11 @@ export function initializeRoutes(app) {
     });
 
     // --- Existing Routes ---
-    app.get('/api/stream-status', (req, res) => {
+    app.get('/stream-status', (req, res) => {
         res.json({ marketData: marketDataStatus });
     });
 
-    app.get('/api/trade-blotter', async (req, res) => {
+    app.get('/trade-blotter', async (req, res) => {
         try {
             const trades = await getDb().all('SELECT * FROM closed_trades ORDER BY timestamp DESC');
             res.json(trades);
@@ -67,7 +67,7 @@ export function initializeRoutes(app) {
         }
     });
 
-    app.post('/api/predictive-signal', async (req, res) => {
+    app.post('/predictive-signal', async (req, res) => {
         const { asset, settings } = req.body;
         if (marketDataStatus !== 'LIVE') {
             return res.status(503).json({ error: `Cannot generate playbook: Market Data Feed is offline.` });
@@ -80,20 +80,20 @@ export function initializeRoutes(app) {
         }
     });
 
-    app.post('/api/engage-playbook', (req, res) => {
+    app.post('/engage-playbook', (req, res) => {
         const { playbook, clientId } = req.body;
         activePlaybooks.set(clientId, { playbook, ws: null, state: 'Stalking', countdown: 3, lastState: null });
         res.status(200).send({ message: 'Engagement acknowledged.' });
     });
 
-    app.post('/api/disengage-playbook', (req, res) => {
+    app.post('/disengage-playbook', (req, res) => {
         const { clientId } = req.body;
         if (activePlaybooks.has(clientId)) activePlaybooks.delete(clientId);
         res.status(200).send({ message: 'Disengagement acknowledged.' });
     });
 
     // --- EXECUTION CORE ---
-    app.post('/api/execution-core/connect', (req, res) => {
+    app.post('/execution-core/connect', (req, res) => {
         const { connectorId, secureKey, clientId } = req.body;
         if (secureKey !== 'SECURE-KEY-MT5') {
             return res.status(403).json({ success: false, message: 'Invalid secure key.' });
@@ -114,7 +114,7 @@ export function initializeRoutes(app) {
         res.status(200).json({ success: true, message: 'Session initialized. Ready for WebSocket connection.' });
     });
 
-    app.post('/api/execution-core/toggle', async (req, res) => {
+    app.post('/execution-core/toggle', async (req, res) => {
         const connectorId = "NEXUS-EA-1337"; // This should be dynamic in a multi-connector system
         const { isActive } = req.body;
         
@@ -134,7 +134,7 @@ export function initializeRoutes(app) {
     });
 
     // --- MQL5 EA Endpoints ---
-    app.post('/api/ea/heartbeat', (req, res) => {
+    app.post('/ea/heartbeat', (req, res) => {
         try {
             const { connectorId, secureKey, metrics, positions } = req.body;
             if (secureKey !== 'SECURE-KEY-MT5') return res.status(200).json({ status: 'error', message: 'Invalid key' });
@@ -175,7 +175,7 @@ export function initializeRoutes(app) {
         }
     });
 
-    app.get('/api/ea/commands', (req, res) => {
+    app.get('/ea/commands', (req, res) => {
         try {
             const { connectorId } = req.query; 
             const isHeartbeatRecent = lastHeartbeatMap.has(connectorId) && (Date.now() - lastHeartbeatMap.get(connectorId) < 30000);
@@ -196,7 +196,7 @@ export function initializeRoutes(app) {
         }
     });
     
-    app.post('/api/gemini-vision-signal', async (req, res) => {
+    app.post('/gemini-vision-signal', async (req, res) => {
         try {
             const { prompt, imageData, mimeType } = req.body;
             const analysis = await getSignalFromImageAI(prompt, imageData, mimeType);
@@ -206,7 +206,7 @@ export function initializeRoutes(app) {
         }
     });
 
-    app.get('/api/gemini-stream', async (req, res) => {
+    app.get('/gemini-stream', async (req, res) => {
         res.setHeader('Content-Type', 'text/event-stream');
         res.setHeader('Cache-Control', 'no-cache');
         res.setHeader('Connection', 'keep-alive');

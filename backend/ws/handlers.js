@@ -1,4 +1,3 @@
-
 import { WebSocketServer, WebSocket } from 'ws';
 import { getAlphaPlaybookFromAI } from '../ai/alphaLiquidation.js';
 import { runPraetorianBrain } from '../ai/praetorian.js';
@@ -463,11 +462,11 @@ export function initializeWebSockets(server) {
     server.on('upgrade', (request, socket, head) => {
         const { pathname } = new URL(request.url, `http://${request.headers.host}`);
         const wssMap = {
-            '/api/dashboard-stream': wssDashboard, '/api/trade-stream': wssTradeStream,
-            '/api/automated-trade-signals': wssAutomatedSignals, '/api/anomaly-stream': wssAnomaly,
-            '/api/trade-companion-stream': wssTradeCompanion,
-            '/api/execution-core-stream': wssExecutionCore,
-            '/api/agent-swarm-stream': wssAgentSwarm
+            '/dashboard-stream': wssDashboard, '/trade-stream': wssTradeStream,
+            '/automated-trade-signals': wssAutomatedSignals, '/anomaly-stream': wssAnomaly,
+            '/trade-companion-stream': wssTradeCompanion,
+            '/execution-core-stream': wssExecutionCore,
+            '/agent-swarm-stream': wssAgentSwarm
         };
         const wss = wssMap[pathname];
         if (wss) {
