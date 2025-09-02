@@ -6,7 +6,7 @@
   "scripts": {
     "start": "npx concurrently \"npm:start-frontend\" \"npm:start-backend\"",
     "start-frontend": "vite",
-    "start-backend": "(cd backend && npm install) && node backend/server.js",
+    "start-backend": "node backend/server.js",
     "build": "vite build",
     "backtest": "node backend/backtest.js"
   },
