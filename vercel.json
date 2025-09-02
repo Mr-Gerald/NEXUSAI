@@ -13,7 +13,18 @@
         "src": "backend/server.js",
         "use": "@vercel/node",
         "config": {
-          "includeFiles": ["backend/database.sqlite", "backend/*.csv"]
+          "includeFiles": [
+            "backend/api/**",
+            "backend/ai/**",
+            "backend/data/**",
+            "backend/risk/**",
+            "backend/ws/**",
+            "backend/db.js",
+            "backend/state.js",
+            "backend/database.sqlite",
+            "backend/*.csv",
+            "backend/.env"
+          ]
         }
       }
     ],
@@ -21,6 +32,10 @@
       {
         "source": "/api/(.*)",
         "destination": "/backend/server.js"
+      },
+      {
+        "source": "/(.*)",
+        "destination": "/index.html"
       }
     ]
-  }  
+  }
