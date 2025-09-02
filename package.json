@@ -1,14 +1,12 @@
-
 {
   "name": "nexus-ai-dashboard-fullstack",
   "private": true,
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "install": "npm i && (cd backend && npm i)",
     "start": "npx concurrently \"npm:start-frontend\" \"npm:start-backend\"",
     "start-frontend": "vite",
-    "start-backend": "(cd backend && npm install) && node server.js",
+    "start-backend": "(cd backend && npm install) && node backend/server.js",
     "build": "vite build",
     "backtest": "node backend/backtest.js"
   },
